@@ -31,14 +31,17 @@ while True:
     # Sprawdzanie, czy podana opcja jest prawidłowa
     while opcja != 1 and opcja != 2:
         print(Style.BRIGHT + Fore.RED  + "Podana opcja nie istnieje. " + Fore.WHITE + "Spróbuj ponownie.")
-        time.sleep(0.5)
+        time.sleep(0.5) # Opóźnienie 0.5 sekundy
         opcja = int(input("Opcja: "))
     
     # Gra
     if opcja == 1:
+        time.sleep(0.35)
         os.system('cls') # Wyczyszczenie konsoli
+
         Wielkosc_planszy = 7
         Plansza = Stworz_plansze(Wielkosc_planszy)
+
         print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
         print(Style.BRIGHT + Fore.WHITE + "                                                  Twój ruch" + Fore.WHITE)
         print(Style.BRIGHT + Fore.WHITE + "                                                                                      O - puste pole")
@@ -46,7 +49,7 @@ while True:
         print(Style.BRIGHT + Fore.WHITE + "                                                                                      " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
         Wyswietl_plansze(Plansza)
         Podaj_kolumna = input("Podaj kolumnę: ")
-        time.sleep(0.5)
+        time.sleep(0.5) # Opóźnienie 0.5 sekundy
         Podaj_wiersz = input("Podaj wiersz: ")
         print(Style.BRIGHT + Fore.WHITE +"                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
         
@@ -60,4 +63,11 @@ while True:
         print(Style.BRIGHT + Fore.WHITE + "                                                  Statki"+Fore.WHITE)
         print(Style.BRIGHT + Fore.WHITE + "\n                                                  Autorzy: \n" + Fore.YELLOW + "                                       Szymon Stelmach, Szymon Przeklasa")
         print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
-        input()
+        
+        powrot = input(Style.BRIGHT + Fore.WHITE + Back.BLACK + "Powrót (" + Fore.GREEN + "T" + Fore.WHITE + "/" + Fore.RED + "N" + Fore.WHITE + "): ")
+        if powrot.lower() == "t" or powrot.lower() == "ta" or powrot.lower() == "tak":
+            True
+        elif powrot.lower() == "n" or powrot.lower() == "ni" or powrot.lower() == "nie":
+            time.sleep(10000)
+        else:
+            pass
