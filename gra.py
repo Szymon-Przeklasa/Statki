@@ -21,13 +21,11 @@ def Stworz_plansze(Rozmiar):
 
 def Wyswietl_plansze_gracza(Plansza): #Wyświetlanie planszy gracza
     for Rzad in Plansza:
-        Plansza_gracza = print("                              " + " ".join(Rzad))
-    return Plansza_gracza
+        print("                              " + " ".join(Rzad))
 
 def Wyswietl_plansze_komputera(Plansza): #Wyświetlanie planszy komputera
     for Rzad in Plansza:
-        Plansza_komputera = print("                      " + " ".join(Rzad))
-    return Plansza_komputera
+        print("                      " + " ".join(Rzad))
 
 def Wyswietl_obie_plansze(Plansza):
     for Rzad in Plansza:
