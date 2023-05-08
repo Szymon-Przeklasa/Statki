@@ -89,11 +89,13 @@ def Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow):
                 Aktualizuj_plansze_komputera(Plansza, Kolumna_komputera, Wiersz_komputera)
                 break
 
+Ruch = 0 # 0 - gracz, 1 - komputer
+
+Menu() # Wywołanie Menu Głównego
+opcja = int(input("Opcja: "))
 while True:
-    
+
     os.system('cls') # Wyczyszczenie konsoli
-    Menu() # Wywołanie Menu Głównego
-    opcja = int(input("Opcja: "))
 
     # Sprawdzanie, czy podana opcja jest prawidłowa
     while opcja != 1 and opcja != 2:
@@ -103,7 +105,6 @@ while True:
     
     # Gra
     if opcja == 1:
-        time.sleep(0.35)
         os.system('cls') # Wyczyszczenie konsoli
 
         # Dane potrzebne do gry
@@ -111,11 +112,9 @@ while True:
         Ilosc_statkow = 3
 
         Plansza = Stworz_plansze(Rozmiar_planszy)
-        
-        Ruch = "gracz"
-        
+         
         print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
-        if Ruch == "gracz":
+        if Ruch == 0:
             print(Style.BRIGHT + Fore.GREEN + "                                                   Twój ruch")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                          O - puste pole")
             print(Style.BRIGHT + Fore.BLACK + "                                                                                          S" + Fore.WHITE + " - pole ze statkiem")
@@ -123,7 +122,8 @@ while True:
             print(Style.BRIGHT + Fore.WHITE + "                                                                                          " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
             Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera)
             Rozstawianie_statkow_gracza(Plansza, Ilosc_statkow)
-        elif Ruch == "komputer":
+            Ruch = 1
+        elif Ruch == 1:
             print(Style.BRIGHT + Fore.RED + "                                               Ruch komputera")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                           O - puste pole")
             print(Style.BRIGHT + Fore.BLACK + "                                                                                           S" + Fore.WHITE + " - pole ze statkiem")
@@ -131,10 +131,9 @@ while True:
             print(Style.BRIGHT + Fore.WHITE + "                                                                                           " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
             Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera)
             Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow)
+            Ruch = 0
         print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
         
-
-
     # Autorzy
     elif opcja == 2:
         os.system("cls") # Wyczyszczenie konsoli
