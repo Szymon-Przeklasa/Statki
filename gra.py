@@ -73,23 +73,55 @@ def Rozstawianie_statkow_gracza(Plansza, Ilosc_statkow):
             Kolumna_gracza = int(input("Podaj kolumnę statku: ")) - 1
             time.sleep(0.2)
             Wiersz_gracza = int(input("Podaj wiersz statku: ")) - 1
-            if Plansza_gracza[Wiersz_gracza][Kolumna_gracza] != "S":
+            if Plansza_gracza[Wiersz_gracza][Kolumna_gracza] != Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
                 Aktualizuj_plansze_gracza(Plansza, Kolumna_gracza, Wiersz_gracza)
                 break
             else:
                 print("Na tym polu jest już statek!")
-      
+   
 # Rozstawianie statków na planszy (komputera)
 def Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow):
     for i in range(Ilosc_statkow):
         while True:
             Kolumna_komputera = Losuj_pozycje(Plansza)
             Wiersz_komputera = Losuj_pozycje(Plansza)
-            if Plansza_komputera[Kolumna_komputera][Wiersz_komputera] != "S":
-                Aktualizuj_plansze_komputera(Plansza, Kolumna_komputera, Wiersz_komputera)
+            if Plansza_komputera[Kolumna_komputera][Wiersz_komputera] != Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
+                StatkiKomputera.append([Wiersz_komputera, Kolumna_komputera])
                 break
 
+StatkiKomputera = []
+
+def StrzelanieGracza():
+    global StrzalGracza_W_Kolumne
+    global StrzalGracza_W_Wiersz
+    print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
+    StrzalGracza_W_Kolumne = int(input("Podaj kolumnę strzału: ")) - 1
+    StrzalGracza_W_Wiersz = int(input("Podaj wiersz strzału: ")) - 1
+    
+def StrzelanieKomputera():
+    global StrzalKomputera_W_Kolumne
+    global StrzalKomputera_W_Wiersz
+    print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
+    StrzalKomputera_W_Kolumne = Losuj_pozycje(Plansza)
+    StrzalKomputera_W_Wiersz = Losuj_pozycje(Plansza)
+
+def TrafienieGracza(Kolumna, Wiersz):
+    for statek in StatkiKomputera:
+        if statek[0] == Wiersz and statek[1] == Kolumna:
+            Plansza_komputera[Wiersz][Kolumna] = Style.BRIGHT + Fore.GREEN + "X" + Fore.WHITE
+            return
+    Plansza_komputera[Wiersz][Kolumna] = Style.BRIGHT + Fore.RED + "X" + Fore.WHITE
+
+def TrafienieKomputera(Kolumna, Wiersz):
+    if Plansza_gracza[Wiersz][Kolumna] == Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
+        Plansza_gracza[Wiersz][Kolumna] = Style.BRIGHT + Fore.GREEN + "X" + Fore.WHITE
+    else:
+        Plansza_gracza[Wiersz][Kolumna] = Style.BRIGHT + Fore.RED + "X" + Fore.WHITE
+
 Ruch = 0 # 0 - gracz, 1 - komputer
+Rozstawiono_statki_gracza = False
+Rozstawiono_statki_komputera = False
+temp = 0
 
 Menu() # Wywołanie Menu Głównego
 opcja = int(input("Opcja: "))
@@ -102,7 +134,6 @@ while True:
         print(Style.BRIGHT + Fore.RED  + "Podana opcja nie istnieje. " + Fore.WHITE + "Spróbuj ponownie.")
         time.sleep(0.5) # Opóźnienie 0.5 sekundy
         opcja = int(input("Opcja: "))
-    
     # Gra
     if opcja == 1:
         os.system('cls') # Wyczyszczenie konsoli
@@ -121,17 +152,32 @@ while True:
             print(Style.BRIGHT + Fore.WHITE + "                              Twoja Plansza:                   Plansza Komputera:         " + Fore.GREEN + "X" + Fore.WHITE + " - trafione pole")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                          " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
             Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera)
-            Rozstawianie_statkow_gracza(Plansza, Ilosc_statkow)
+            if Rozstawiono_statki_gracza == False:
+                Rozstawianie_statkow_gracza(Plansza, Ilosc_statkow)
+                Rozstawiono_statki_gracza = True
+            if temp <= 0:
+                StrzelanieGracza()
+                TrafienieGracza(StrzalGracza_W_Kolumne, StrzalGracza_W_Wiersz)
+                temp += 1
             Ruch = 1
+            temp = 0
         elif Ruch == 1:
-            print(Style.BRIGHT + Fore.RED + "                                               Ruch komputera")
+            print(Style.BRIGHT + Fore.RED + "                                          Ruch komputera")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                           O - puste pole")
             print(Style.BRIGHT + Fore.BLACK + "                                                                                           S" + Fore.WHITE + " - pole ze statkiem")
             print(Style.BRIGHT + Fore.WHITE + "                              Twoja Plansza:                   Plansza Komputera:          " + Fore.GREEN + "X" + Fore.WHITE + " - trafione pole")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                           " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
             Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera)
-            Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow)
+            if Rozstawiono_statki_komputera == False:
+                Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow)
+                Rozstawiono_statki_komputera = True
+            if temp <= 0:
+                StrzelanieKomputera()
+                TrafienieKomputera(StrzalKomputera_W_Kolumne, StrzalKomputera_W_Wiersz)
+                temp += 1
+            print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
             Ruch = 0
+            temp = 0
         print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
         
     # Autorzy
