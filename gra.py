@@ -87,7 +87,6 @@ def Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow):
             Wiersz_komputera = Losuj_pozycje(Plansza)
             if Plansza_komputera[Wiersz_komputera][Kolumna_komputera] != Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
                 StatkiKomputera.append([Wiersz_komputera, Kolumna_komputera])
-                Aktualizuj_plansze_komputera(Plansza, Kolumna_komputera, Wiersz_komputera)
                 break
 
 StatkiKomputera = []
