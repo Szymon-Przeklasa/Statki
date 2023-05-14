@@ -37,7 +37,7 @@ def Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera):
 
 def Aktualizuj_plansze_gracza(Plansza, Kolumna_gracza, Wiersz_gracza):
     Plansza_gracza[Wiersz_gracza][Kolumna_gracza] = Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE
-    os.system('cls')
+    os.system("cls")
     print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
     print(Style.BRIGHT + Fore.GREEN + "                                                   Twój ruch")
     print(Style.BRIGHT + Fore.WHITE + "                                                                                          O - puste pole")
@@ -49,7 +49,7 @@ def Aktualizuj_plansze_gracza(Plansza, Kolumna_gracza, Wiersz_gracza):
 
 def Aktualizuj_plansze_komputera(Plansza, Kolumna_komputera, Wiersz_komputera):
     Plansza_komputera[Wiersz_komputera][Kolumna_komputera] = Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE
-    os.system('cls')
+    os.system("cls")
     print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
     print(Style.BRIGHT + Fore.RED + "                                                   Ruch komputera")
     print(Style.BRIGHT + Fore.WHITE + "                                                                                          O - puste pole")
@@ -85,25 +85,38 @@ def Rozstawianie_statkow_komputera(Plansza, Ilosc_statkow):
         while True:
             Kolumna_komputera = Losuj_pozycje(Plansza)
             Wiersz_komputera = Losuj_pozycje(Plansza)
-            if Plansza_komputera[Kolumna_komputera][Wiersz_komputera] != Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
+            if Plansza_komputera[Wiersz_komputera][Kolumna_komputera] != Style.BRIGHT + Fore.BLACK + "S" + Fore.WHITE:
                 StatkiKomputera.append([Wiersz_komputera, Kolumna_komputera])
+                Aktualizuj_plansze_komputera(Plansza, Kolumna_komputera, Wiersz_komputera)
                 break
 
 StatkiKomputera = []
+TrafionePolaPrzezGracza = []
+TrafionePolaPrzezKomputer = []
 
 def StrzelanieGracza():
     global StrzalGracza_W_Kolumne
     global StrzalGracza_W_Wiersz
     print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
-    StrzalGracza_W_Kolumne = int(input("Podaj kolumnę strzału: ")) - 1
-    StrzalGracza_W_Wiersz = int(input("Podaj wiersz strzału: ")) - 1
-    
+    while True:
+        StrzalGracza_W_Kolumne = int(input("Podaj kolumnę strzału: ")) - 1
+        StrzalGracza_W_Wiersz = int(input("Podaj wiersz strzału: ")) - 1
+        if Plansza_komputera[StrzalGracza_W_Wiersz][StrzalGracza_W_Kolumne] == Style.BRIGHT + Fore.GREEN + "X" + Fore.WHITE or Plansza_komputera[StrzalGracza_W_Wiersz][StrzalGracza_W_Kolumne] == Style.BRIGHT + Fore.RED + "X" + Fore.WHITE:
+            print(Style.BRIGHT + Fore.WHITE + "Już strzelałeś w to miejsce! Wybierz inne pole.")
+        else:
+            break
+
 def StrzelanieKomputera():
     global StrzalKomputera_W_Kolumne
     global StrzalKomputera_W_Wiersz
     print(Style.BRIGHT + Fore.WHITE +"\n                         [" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
-    StrzalKomputera_W_Kolumne = Losuj_pozycje(Plansza)
-    StrzalKomputera_W_Wiersz = Losuj_pozycje(Plansza)
+    while True:
+        StrzalKomputera_W_Kolumne = Losuj_pozycje(Plansza)
+        StrzalKomputera_W_Wiersz = Losuj_pozycje(Plansza)
+        if Plansza_gracza[StrzalKomputera_W_Wiersz][StrzalKomputera_W_Kolumne] == Style.BRIGHT + Fore.GREEN + "X" + Fore.WHITE or Plansza_gracza[StrzalKomputera_W_Wiersz][StrzalKomputera_W_Kolumne] == Style.BRIGHT + Fore.RED + "X" + Fore.WHITE:
+            pass
+        else:
+            break
 
 def TrafienieGracza(Kolumna, Wiersz):
     for statek in StatkiKomputera:
@@ -118,6 +131,20 @@ def TrafienieKomputera(Kolumna, Wiersz):
     else:
         Plansza_gracza[Wiersz][Kolumna] = Style.BRIGHT + Fore.RED + "X" + Fore.WHITE
 
+def WygranaGracza():
+    TrafionychStatkow = 0
+    for x in range(0, Rozmiar_planszy):
+        for y in range(0, Rozmiar_planszy):
+            if Plansza_komputera[x][y] == Style.BRIGHT + Fore.GREEN + "X" + Fore.WHITE:
+                TrafionychStatkow += 1
+    if TrafionychStatkow == 3:
+        return True
+    else:
+        return False
+
+def WygranaKomputera():
+    pass
+
 Ruch = 0 # 0 - gracz, 1 - komputer
 Rozstawiono_statki_gracza = False
 Rozstawiono_statki_komputera = False
@@ -126,9 +153,7 @@ temp = 0
 Menu() # Wywołanie Menu Głównego
 opcja = int(input("Opcja: "))
 while True:
-
-    os.system('cls') # Wyczyszczenie konsoli
-
+    os.system("cls") # Wyczyszczenie konsoli
     # Sprawdzanie, czy podana opcja jest prawidłowa
     while opcja != 1 and opcja != 2:
         print(Style.BRIGHT + Fore.RED  + "Podana opcja nie istnieje. " + Fore.WHITE + "Spróbuj ponownie.")
@@ -136,7 +161,7 @@ while True:
         opcja = int(input("Opcja: "))
     # Gra
     if opcja == 1:
-        os.system('cls') # Wyczyszczenie konsoli
+        os.system("cls") # Wyczyszczenie konsoli
 
         # Dane potrzebne do gry
         Rozmiar_planszy = 7
@@ -159,10 +184,30 @@ while True:
                 StrzelanieGracza()
                 TrafienieGracza(StrzalGracza_W_Kolumne, StrzalGracza_W_Wiersz)
                 temp += 1
+            os.system("cls")
+            print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
+            print(Style.BRIGHT + Fore.GREEN + "                                                   Twój ruch")
+            print(Style.BRIGHT + Fore.WHITE + "                                                                                          O - puste pole")
+            print(Style.BRIGHT + Fore.BLACK + "                                                                                          S" + Fore.WHITE + " - pole ze statkiem")
+            print(Style.BRIGHT + Fore.WHITE + "                              Twoja Plansza:                   Plansza Komputera:         " + Fore.GREEN + "X" + Fore.WHITE + " - trafione pole")
+            print(Style.BRIGHT + Fore.WHITE + "                                                                                          " + Fore.RED + "X" + Fore.WHITE + " - nietrafione pole")
+            Wyswietl_obie_plansze(Plansza_gracza, Plansza_komputera)
+            print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
+            if WygranaGracza():
+                print(Style.BRIGHT + Fore.WHITE + "Wygrałeś!")
+                powrot = input(Style.BRIGHT + Fore.WHITE + Back.BLACK + "Powrót do Menu (" + Fore.GREEN + "T" + Fore.WHITE + "/" + Fore.RED + "N" + Fore.WHITE + "): ")
+                if powrot.lower() == "t" or powrot.lower() == "ta" or powrot.lower() == "tak":
+                    os.system("cls")
+                    Menu()
+                    opcja = int(input("Opcja: "))
+                elif powrot.lower() == "n" or powrot.lower() == "ni" or powrot.lower() == "nie":
+                    time.sleep(10000)
+                else:
+                    pass 
             Ruch = 1
             temp = 0
         elif Ruch == 1:
-            print(Style.BRIGHT + Fore.RED + "                                          Ruch komputera")
+            print(Style.BRIGHT + Fore.RED + "                                          Komputer myśli...")
             print(Style.BRIGHT + Fore.WHITE + "                                                                                           O - puste pole")
             print(Style.BRIGHT + Fore.BLACK + "                                                                                           S" + Fore.WHITE + " - pole ze statkiem")
             print(Style.BRIGHT + Fore.WHITE + "                              Twoja Plansza:                   Plansza Komputera:          " + Fore.GREEN + "X" + Fore.WHITE + " - trafione pole")
@@ -183,7 +228,7 @@ while True:
     # Autorzy
     elif opcja == 2:
         os.system("cls") # Wyczyszczenie konsoli
-        
+
         print(Style.BRIGHT + Fore.WHITE + "                         [" + Style.BRIGHT + Fore.BLUE + "+" +Style.BRIGHT + Fore.WHITE + "]" + Style.BRIGHT + Fore.BLUE + "-------------------------------------------------------" + Style.BRIGHT + Fore.WHITE + "[" + Style.BRIGHT + Fore.BLUE + "+" + Style.BRIGHT + Fore.WHITE + "]")
         print(Style.BRIGHT + Fore.WHITE + "                                               Statki - Autorzy"+Fore.WHITE)
         print(Style.BRIGHT + Fore.YELLOW + "\n                                       Szymon Stelmach, Szymon Przeklasa")
@@ -191,8 +236,10 @@ while True:
         
         powrot = input(Style.BRIGHT + Fore.WHITE + Back.BLACK + "Powrót (" + Fore.GREEN + "T" + Fore.WHITE + "/" + Fore.RED + "N" + Fore.WHITE + "): ")
         if powrot.lower() == "t" or powrot.lower() == "ta" or powrot.lower() == "tak":
-            True
+            os.system("cls")
+            Menu()
+            opcja = int(input("Opcja: "))
         elif powrot.lower() == "n" or powrot.lower() == "ni" or powrot.lower() == "nie":
             time.sleep(10000)
         else:
-            pass 
+            pass
